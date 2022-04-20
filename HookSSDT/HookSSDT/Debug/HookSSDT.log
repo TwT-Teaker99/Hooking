@@ -1,0 +1,23 @@
+﻿  Building 'HookSSDT' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
+  Stamping Debug\HookSSDT.inf
+  Stamping [Version] section with DriverVer=03/07/2022,1.49.57.333
+  Source.c
+  HookSSDT.vcxproj -> E:\code\HookSSDT\Debug\HookSSDT.sys
+  Done Adding Additional Store
+  Successfully signed: E:\code\HookSSDT\Debug\HookSSDT.sys
+  
+  Driver is 'Universal'.
+  .........................
+  Signability test complete.
+  
+  Errors:
+  None
+  
+  Warnings:
+  None
+  
+  Catalog generation complete.
+  E:\code\HookSSDT\Debug\HookSSDT\hookssdt.cat
+  Done Adding Additional Store
+  Successfully signed: E:\code\HookSSDT\Debug\HookSSDT\hookssdt.cat
+  

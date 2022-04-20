@@ -1,0 +1,6 @@
+﻿  WriteMBRTest.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  Finished generating code
+  All 11 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  WriteMBRTest.vcxproj -> E:\code\WriteMBRTest\Release\WriteMBRTest.exe

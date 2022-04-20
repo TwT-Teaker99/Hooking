@@ -1,0 +1,54 @@
+﻿  Building 'DetectHook' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
+  Stamping Debug\DetectHook.inf
+  Stamping [Version] section with DriverVer=04/20/2022,18.17.56.620
+  SSDTFunction.c
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\SSDTFunction.c(112,26): warning C4133: 'function': incompatible types - from 'PWCHAR' to 'char *'
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\SSDTFunction.c(112,42): warning C4133: 'function': incompatible types - from 'PWCHAR' to 'const char *'
+  Source.c
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(99,34): warning C4996: 'ExAllocatePool': was declared deprecated
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(131,29): warning C4098: 'GetDriverName': 'void' function returning a value
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(143,16): warning C4133: 'function': incompatible types - from 'PWCHAR' to 'char *'
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(143,100): warning C4133: 'function': incompatible types - from 'WCHAR *' to 'const char *'
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(163,28): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(186,16): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(198,20): warning C4477: 'swprintf' : format string '%S' requires an argument of type 'char *', but variadic argument 2 has type 'WCHAR *'
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(198,20): message : consider using '%lS' in the format string
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(198,20): message : consider using '%llS' in the format string
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(198,20): message : consider using '%LS' in the format string
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(198,20): message : consider using '%wS' in the format string
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(198,20): warning C4477: 'swprintf' : format string '%S' requires an argument of type 'char *', but variadic argument 4 has type 'WCHAR *'
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(198,20): message : consider using '%lS' in the format string
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(198,20): message : consider using '%llS' in the format string
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(198,20): message : consider using '%LS' in the format string
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(198,20): message : consider using '%wS' in the format string
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(218,64): warning C4047: '<': 'PDRIVER_DISPATCH' differs in levels of indirection from 'ULONG'
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(218,125): warning C4047: '>': 'PDRIVER_DISPATCH' differs in levels of indirection from 'ULONG'
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(223,57): warning C4047: 'function': 'ULONG' differs in levels of indirection from 'PDRIVER_DISPATCH'
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(223,54): warning C4024: 'GetDriverName': different types for formal and actual parameter 1
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(228,20): warning C4242: 'function': conversion from 'int' to 'USHORT', possible loss of data
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(231,21): warning C4477: 'swprintf' : format string '%x' requires an argument of type 'unsigned int', but variadic argument 1 has type 'PDRIVER_DISPATCH'
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(231,21): warning C4477: 'swprintf' : format string '%S' requires an argument of type 'char *', but variadic argument 2 has type 'WCHAR *'
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(231,21): message : consider using '%lS' in the format string
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(231,21): message : consider using '%llS' in the format string
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(231,21): message : consider using '%LS' in the format string
+C:\Users\Win10_32\Desktop\New folder\DetectHook\DetectHook\Source.c(231,21): message : consider using '%wS' in the format string
+  Generating Code...
+  DetectHook.vcxproj -> C:\Users\Win10_32\Desktop\New folder\DetectHook\Debug\DetectHook.sys
+  Done Adding Additional Store
+  Successfully signed: C:\Users\Win10_32\Desktop\New folder\DetectHook\Debug\DetectHook.sys
+  
+  Driver is 'Universal'.
+  .........................
+  Signability test complete.
+  
+  Errors:
+  None
+  
+  Warnings:
+  None
+  
+  Catalog generation complete.
+  C:\Users\Win10_32\Desktop\New folder\DetectHook\Debug\DetectHook\detecthook.cat
+  Done Adding Additional Store
+  Successfully signed: C:\Users\Win10_32\Desktop\New folder\DetectHook\Debug\DetectHook\detecthook.cat
+  

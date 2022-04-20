@@ -1,0 +1,80 @@
+;
+; HookSSDT.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System ; TODO: specify appropriate Class
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318} ; TODO: specify appropriate ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=HookSSDT.cat
+DriverVer = 03/07/2022,1.49.57.333
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+HookSSDT_Device_CoInstaller_CopyFiles = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+HookSSDT.sys  = 1,,
+;
+
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NTx86
+
+[Standard.NTx86]
+%HookSSDT.DeviceDesc%=HookSSDT_Device, Root\HookSSDT ; TODO: edit hw-id
+
+[HookSSDT_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+HookSSDT.sys
+
+;-------------- Service installation
+[HookSSDT_Device.NT.Services]
+AddService = HookSSDT,%SPSVCINST_ASSOCSERVICE%, HookSSDT_Service_Inst
+
+; -------------- HookSSDT driver install sections
+[HookSSDT_Service_Inst]
+DisplayName    = %HookSSDT.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\HookSSDT.sys
+
+;
+;--- HookSSDT_Device Coinstaller installation ------
+;
+
+[HookSSDT_Device.NT.CoInstallers]
+AddReg=HookSSDT_Device_CoInstaller_AddReg
+CopyFiles=HookSSDT_Device_CoInstaller_CopyFiles
+
+[HookSSDT_Device_CoInstaller_AddReg]
+;
+
+
+[HookSSDT_Device_CoInstaller_CopyFiles]
+;
+
+
+[HookSSDT_Device.NT.Wdf]
+KmdfService =  HookSSDT, HookSSDT_wdfsect
+[HookSSDT_wdfsect]
+KmdfLibraryVersion = 1.15
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+DiskName = "HookSSDT Installation Disk"
+HookSSDT.DeviceDesc = "HookSSDT Device"
+HookSSDT.SVCDESC = "HookSSDT Service"

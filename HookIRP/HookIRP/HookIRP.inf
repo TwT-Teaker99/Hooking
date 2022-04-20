@@ -1,0 +1,77 @@
+;
+; HookIRP.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=System ; TODO: specify appropriate Class
+ClassGuid={4d36e97d-e325-11ce-bfc1-08002be10318} ; TODO: specify appropriate ClassGuid
+Provider=%ManufacturerName%
+CatalogFile=HookIRP.cat
+DriverVer= ; TODO: set DriverVer in stampinf property pages
+PnpLockdown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+HookIRP_Device_CoInstaller_CopyFiles = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+HookIRP.sys  = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%HookIRP.DeviceDesc%=HookIRP_Device, Root\HookIRP ; TODO: edit hw-id
+
+[HookIRP_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+HookIRP.sys
+
+;-------------- Service installation
+[HookIRP_Device.NT.Services]
+AddService = HookIRP,%SPSVCINST_ASSOCSERVICE%, HookIRP_Service_Inst
+
+; -------------- HookIRP driver install sections
+[HookIRP_Service_Inst]
+DisplayName    = %HookIRP.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\HookIRP.sys
+
+;
+;--- HookIRP_Device Coinstaller installation ------
+;
+
+[HookIRP_Device.NT.CoInstallers]
+AddReg=HookIRP_Device_CoInstaller_AddReg
+CopyFiles=HookIRP_Device_CoInstaller_CopyFiles
+
+[HookIRP_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[HookIRP_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[HookIRP_Device.NT.Wdf]
+KmdfService =  HookIRP, HookIRP_wdfsect
+[HookIRP_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+DiskName = "HookIRP Installation Disk"
+HookIRP.DeviceDesc = "HookIRP Device"
+HookIRP.SVCDESC = "HookIRP Service"

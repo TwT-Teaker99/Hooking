@@ -1,0 +1,24 @@
+﻿  Building 'HookIRP' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
+  Stamping Debug\HookIRP.inf
+  Stamping [Version] section with DriverVer=03/29/2022,2.12.28.386
+  Source.c
+E:\code\HookIRP\HookIRP\Source.c(121,18): warning C4996: 'wcscpy': This function or variable may be unsafe. Consider using wcscpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  HookIRP.vcxproj -> E:\code\HookIRP\Debug\HookIRP.sys
+  Done Adding Additional Store
+  Successfully signed: E:\code\HookIRP\Debug\HookIRP.sys
+  
+  Driver is 'Universal'.
+  ........................
+  Signability test complete.
+  
+  Errors:
+  None
+  
+  Warnings:
+  None
+  
+  Catalog generation complete.
+  E:\code\HookIRP\Debug\HookIRP\hookirp.cat
+  Done Adding Additional Store
+  Successfully signed: E:\code\HookIRP\Debug\HookIRP\hookirp.cat
+  
