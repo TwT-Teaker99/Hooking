@@ -17,59 +17,6 @@ void GetFolderPath(char* pathFile, char* pathFolder)
 
 }
 
-BOOL GetFunctionNameByIndex(DWORD ulModuleBase, int* Index, CHAR* lpszFunctionName)
-{
-	HANDLE hNtSection;
-	PIMAGE_DOS_HEADER ulNtDllModuleBase;
-	PIMAGE_DOS_HEADER pDosHeader;
-	PIMAGE_NT_HEADERS NtDllHeader;
-
-	IMAGE_OPTIONAL_HEADER opthdr;
-	DWORD* arrayOfFunctionAddresses;
-	DWORD* arrayOfFunctionNames;
-	WORD* arrayOfFunctionOrdinals;
-	DWORD functionOrdinal;
-	DWORD Base, x, functionAddress, position;
-	char* functionName;
-	IMAGE_EXPORT_DIRECTORY* pExportTable;
-	BOOL bRetOK = FALSE;
-	BOOL bInit = FALSE;
-
-	ulNtDllModuleBase = (PIMAGE_DOS_HEADER)ulModuleBase;
-	pDosHeader = (PIMAGE_DOS_HEADER)ulNtDllModuleBase;
-	if (pDosHeader->e_magic != IMAGE_DOS_SIGNATURE)
-	{
-		return bRetOK;
-	}
-	NtDllHeader = (PIMAGE_NT_HEADERS)(ULONG)((ULONG)pDosHeader + pDosHeader->e_lfanew);
-	if (NtDllHeader->Signature != IMAGE_NT_SIGNATURE)
-	{
-		return bRetOK;
-	}
-	opthdr = NtDllHeader->OptionalHeader;
-	pExportTable = (IMAGE_EXPORT_DIRECTORY*)((BYTE*)ulNtDllModuleBase + opthdr.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress);
-	arrayOfFunctionAddresses = (DWORD*)((BYTE*)ulNtDllModuleBase + pExportTable->AddressOfFunctions);
-	arrayOfFunctionNames = (DWORD*)((BYTE*)ulNtDllModuleBase + pExportTable->AddressOfNames);
-	arrayOfFunctionOrdinals = (WORD*)((BYTE*)ulNtDllModuleBase + pExportTable->AddressOfNameOrdinals);
-
-	Base = pExportTable->Base;
-
-	for (x = 0; x < pExportTable->NumberOfFunctions; x++)
-	{
-		functionName = (char*)((BYTE*)ulNtDllModuleBase + arrayOfFunctionNames[x + Base - 1]);
-		functionOrdinal = arrayOfFunctionOrdinals[x] + Base - 1;
-		functionAddress = (DWORD)((BYTE*)ulNtDllModuleBase + arrayOfFunctionAddresses[functionOrdinal]);
-		position = *((WORD*)(functionAddress + 1));
-
-		if (*Index == position)
-		{
-			strcat(lpszFunctionName, functionName);
-			bRetOK = TRUE;
-			break;
-		}
-	}
-	return bRetOK;
-}
 
 
 int main()
@@ -144,7 +91,7 @@ int main()
 
 			status = DeviceIoControl(device, IO_BUFFER, wChoice, sizeof(wChoice), wOutBuff, sizeof(wOutBuff), &bytesReturned, (LPOVERLAPPED)NULL);
 
-
+			CloseHandle(device);
 			std::wcout << L"\nResult is:\n\n" << wOutBuff << std::endl;
 
 			//system("pause");

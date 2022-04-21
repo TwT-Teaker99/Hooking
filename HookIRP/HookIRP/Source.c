@@ -1,7 +1,6 @@
 #include "ntifs.h"
 #include "ntstrsafe.h"
 
-
 typedef NTSTATUS(*IRP_MJ_SERIES)
 (
 	IN PDEVICE_OBJECT DeviceObject,
@@ -11,14 +10,11 @@ typedef NTSTATUS(*IRP_MJ_SERIES)
 DRIVER_DISPATCH FunDeviceControl;//+
 #define IO_BUFFER CTL_CODE(FILE_DEVICE_UNKNOWN, 0x2049, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-
 WCHAR p_Notification[256];
 
 //UNICODE_STRING S_Notification = {0};
 
-
 IRP_MJ_SERIES g_OriFunc = NULL;
-
 
 PDEVICE_OBJECT g_pDeviceObject = NULL;
 
@@ -71,7 +67,7 @@ WriteFunc(
 	WCHAR str_Svchost[] = L"\\Device\\HarddiskVolume1\\Windows\\System32\\svchost.exe";
 	WCHAR str_Vds[] = L"\\Device\\HarddiskVolume1\\Windows\\System32\\vds.exe";
 	//UNICODE_STRING pathAccept[2];
-//	UNICODE_STRING text, title;
+	//UNICODE_STRING text, title;
 	//ULONG_PTR param[3];
 	ULONG response;
 	__try {
@@ -162,15 +158,7 @@ DriverEntry(
 	for (USHORT i = 0; i < IRP_MJ_MAXIMUM_FUNCTION + 1; i++)    // chi dinh default dispatch cho cac doi tuong IRP_MJ_Funcion
 		pDriverObject->MajorFunction[i] = DefaultFunc;
 
-
-
-
 	pDriverObject->DriverUnload = DriverUnload;
-
-
-
-
-
 
 	// chen WriteFunc chan mbr
 	UNICODE_STRING uniDriveName = RTL_CONSTANT_STRING(L"\\Device\\Harddisk0\\DR0");// ten doi tuong se duoc con tro tro den

@@ -22,37 +22,6 @@ UNICODE_STRING DEVICE_SYMBOLIC_NAME = RTL_CONSTANT_STRING(L"\\??\\DetectHookS");
 
 WCHAR wListSSDT[1000] = { 0 };
 WCHAR wListIRP[1000] = { 0 };
-//
-//IMJFunc arrIMJFunc[] = {
-//	{0,L"IRP_MJ_CREATE"},
-//{1,L"IRP_MJ_CREATE_NAMED_PIPE"},
-//{2,L"IRP_MJ_CLOSE"},
-//{3,L"IRP_MJ_READ"},
-//{4,L"IRP_MJ_WRITE"},
-//{5,L"IRP_MJ_QUERY_INFORMATION"},
-//{6,L"IRP_MJ_SET_INFORMATION"},
-//{7,L"IRP_MJ_QUERY_EA"},
-//{8,L"IRP_MJ_SET_EA"},
-//{9,L"IRP_MJ_FLUSH_BUFFERS"},
-//{10,L"IRP_MJ_QUERY_VOLUME_INFORMATION"},
-//{13,L"IRP_MJ_SET_VOLUME_INFORMATION"},
-//{14,L"IRP_MJ_DIRECTORY_CONTROL"},
-//{15,L"IRP_MJ_FILE_SYSTEM_CONTROL"},
-//{16,L"IRP_MJ_DEVICE_CONTROL"},
-//{17,L"IRP_MJ_INTERNAL_DEVICE_CONTROL"},
-//{18,L"IRP_MJ_SHUTDOWN"},
-//{19,L"IRP_MJ_LOCK_CONTROL"},
-//{20,L"IRP_MJ_CLEANUP"},
-//{1,L"IRP_MJ_CREATE_MAILSLOT"},
-//{1,L"IRP_MJ_QUERY_SECURITY"},
-//{1,L"IRP_MJ_SET_SECURITY"},
-//{1,L"IRP_MJ_POWER"},
-//{1,L"IRP_MJ_SYSTEM_CONTROL"},
-//{1,L"IRP_MJ_DEVICE_CHANGE"},
-//{1,L"IRP_MJ_QUERY_QUOTA"},
-//{1,L"IRP_MJ_SET_QUOTA"},
-//{1,L"IRP_MJ_PNP"},
-//};
 
 WCHAR* arrIMJFunc1[] = { L"IRP_MJ_CREATE",
 L"IRP_MJ_CREATE_NAMED_PIPE",
@@ -197,6 +166,7 @@ void IdentifySSDTHooks(void)
 			GetSSDTFunction(i, funName);
 			swprintf(wTemp, L"\t - Function [%d][%S] is hooked at add [%x] by driver [%S] ", i, funName, KeServiceDescriptorTable.ServiceTableBase[i], wNameDriver);
 			KdPrint(("Detect: wTemp = %S", wTemp));
+			//memset(wListSSDT, 0, 1000);
 			wcscat(wListSSDT, wTemp);
 			wcscat(wListSSDT, L".\n");
 		}
@@ -242,6 +212,7 @@ void IdentifyIRPHooks(PWCHAR pDriverName)
 
 				//wcscat(wIMJFun, wTemp);
 				//KdPrint(("Detect_IRP: datasend = %S", wDataSend));
+				//memset(wListIRP, 0, 1000);
 				wcscat(wListIRP, wDataSend);
 				wcscat(wListIRP, L".\n");
 
@@ -327,6 +298,8 @@ NTSTATUS DeviceIOControlFunc(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIRP)
 
 	}
 
+	ScanHook();
+
 	KdPrint(("Detect: [%S] wListSSDT = %wZ\n", __FUNCTIONW__, wListSSDT));
 
 	KdPrint(("Detect: [%S] wListIRP = %wZ\n", __FUNCTIONW__, wListIRP));
@@ -337,7 +310,7 @@ NTSTATUS DeviceIOControlFunc(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIRP)
 		pIRP->IoStatus.Status = STATUS_SUCCESS;
 		RtlCopyMemory(pIRP->AssociatedIrp.SystemBuffer, wListSSDT, wcslen(wListSSDT) * 2);
 		IoCompleteRequest(pIRP, IO_NO_INCREMENT);
-		//wcscpy(wListSSDT, L" ");
+		
 	}
 	else
 	{
@@ -345,24 +318,17 @@ NTSTATUS DeviceIOControlFunc(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIRP)
 		pIRP->IoStatus.Status = STATUS_SUCCESS;
 		RtlCopyMemory(pIRP->AssociatedIrp.SystemBuffer, wListIRP, wcslen(wListIRP) * 2);
 		IoCompleteRequest(pIRP, IO_NO_INCREMENT);
-		//wcscpy(wListIRP, L" ");
+		
 	}
-
-
-
-
+	wcscpy(wListSSDT, L" ");
+	wcscpy(wListIRP, L" ");
 	return STATUS_SUCCESS;
 }
 
 NTSTATUS DriverEntry(IN PDRIVER_OBJECT pDriverObject, IN PUNICODE_STRING pRegistryPath)
 {
-
-	int  count;
-	g_pml = NULL;
-	g_ntoskrnl.base = 0;
-	g_ntoskrnl.end = 0;
 	NTSTATUS ntStatus;
-	g_pml = GetListOfModules(&ntStatus);
+
 
 	UNREFERENCED_PARAMETER(pRegistryPath);
 
@@ -391,7 +357,16 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT pDriverObject, IN PUNICODE_STRING pRegist
 		KdPrint(("CMC: Create symbolic link error"));
 	else
 		KdPrint(("CMC: Create symbolic link success"));
-
+	
+	return ntStatus;
+}
+PVOID ScanHook()
+{
+	NTSTATUS ntStatus = STATUS_SUCCESS;
+	int  count;
+	g_ntoskrnl.base = 0;
+	g_ntoskrnl.end = 0;
+	g_pml = GetListOfModules(&ntStatus);
 	if (!g_pml)
 	{
 		return STATUS_UNSUCCESSFUL;
@@ -404,29 +379,17 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT pDriverObject, IN PUNICODE_STRING pRegist
 			g_ntoskrnl.base = (DWORD)g_pml->a_Modules[count].p_Base;
 			g_ntoskrnl.end = ((DWORD)g_pml->a_Modules[count].p_Base + g_pml->a_Modules[count].ul_Size);
 			IdentifySSDTHooks();
-
 		}
-
-
 		if (_stricmp("partmgr.sys", g_pml->a_Modules[count].c_Path + g_pml->a_Modules[count].us_NameOffset) == 0)
 		{
 			g_partmgr.base = (DWORD)g_pml->a_Modules[count].p_Base;
 			g_partmgr.end = ((DWORD)g_pml->a_Modules[count].p_Base + g_pml->a_Modules[count].ul_Size);
 			IdentifyIRPHooks(L"partmgr.sys");
-
 		}
-
-
 	}
 	ExFreePool(g_pml);
-
-
-
-
-	return ntStatus;
-
+	return;
 }
-
 
 
 

@@ -1,12 +1,12 @@
-﻿  Building 'HookSSDT' with toolset 'WindowsKernelModeDriver10.0' and the 'Universal' target platform.
+﻿  Building 'HookSSDT' with toolset 'WindowsKernelModeDriver10.0' and the 'Desktop' target platform.
   Stamping Debug\HookSSDT.inf
-  Stamping [Version] section with DriverVer=03/07/2022,1.49.57.333
-  Source.c
-  HookSSDT.vcxproj -> E:\code\HookSSDT\Debug\HookSSDT.sys
+  Stamping [Version] section with DriverVer=04/21/2022,22.29.45.218
+  SSDTHook.c
+C:\Users\Win10-32\Desktop\HookSSDT\HookSSDT\SSDTHook.c(179,25): warning C4996: 'ExAllocatePool': was declared deprecated
+  HookSSDT.vcxproj -> C:\Users\Win10-32\Desktop\HookSSDT\Debug\HookSSDT.sys
   Done Adding Additional Store
-  Successfully signed: E:\code\HookSSDT\Debug\HookSSDT.sys
+  Successfully signed: C:\Users\Win10-32\Desktop\HookSSDT\Debug\HookSSDT.sys
   
-  Driver is 'Universal'.
   .........................
   Signability test complete.
   
@@ -17,7 +17,7 @@
   None
   
   Catalog generation complete.
-  E:\code\HookSSDT\Debug\HookSSDT\hookssdt.cat
+  C:\Users\Win10-32\Desktop\HookSSDT\Debug\HookSSDT\hookssdt.cat
   Done Adding Additional Store
-  Successfully signed: E:\code\HookSSDT\Debug\HookSSDT\hookssdt.cat
+  Successfully signed: C:\Users\Win10-32\Desktop\HookSSDT\Debug\HookSSDT\hookssdt.cat
   

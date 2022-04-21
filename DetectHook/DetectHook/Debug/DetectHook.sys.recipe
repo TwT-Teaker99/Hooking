@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\Win10_32\Desktop\New folder\DetectHook\Debug\DetectHook.sys</FullPath>
+      <FullPath>C:\Users\Win10-32\Desktop\DetectHook\Debug\DetectHook.sys</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

@@ -22,7 +22,7 @@ ULONG GetSSDTFunctionIndex(UNICODE_STRING ustrDllFileName, PWCHAR pszFunctionNam
 	NTSTATUS status1 = DllFileMap(ustrDllFileName, &hFile, &hSection, &pBaseAddress);
 	if (!NT_SUCCESS(status1))
 	{
-		KdPrint(("DllFileMap Error!\n"));
+		KdPrint(("[Detect]DllFileMap Error!\n"));
 		return status;
 	}
 	if (GetIndexFromExportTable(pBaseAddress, pszFunctionName, index) == 1) {
@@ -49,14 +49,14 @@ NTSTATUS DllFileMap(UNICODE_STRING ustrDllFileName, HANDLE* phFile, HANDLE* phSe
 		FILE_SHARE_READ, FILE_SYNCHRONOUS_IO_NONALERT);
 	if (!NT_SUCCESS(status))
 	{
-		KdPrint(("ZwOpenFile Error! [error code: 0x%X]", status));
+		KdPrint(("[Detect]ZwOpenFile Error! [error code: 0x%X]", status));
 		return status;
 	}
 	status = ZwCreateSection(&hSection, SECTION_MAP_READ | SECTION_MAP_WRITE, NULL, 0, PAGE_READWRITE, 0x1000000, hFile);
 	if (!NT_SUCCESS(status))
 	{
 		ZwClose(hFile);
-		KdPrint(("ZwCreateSection Error! [error code: 0x%X]", status));
+		KdPrint(("[Detect]ZwCreateSection Error! [error code: 0x%X]", status));
 		return status;
 	}
 	status = ZwMapViewOfSection(hSection, NtCurrentProcess(), &pBaseAddress, 0, 1024, 0, &viewSize, ViewShare, MEM_TOP_DOWN, PAGE_READWRITE);
@@ -64,7 +64,7 @@ NTSTATUS DllFileMap(UNICODE_STRING ustrDllFileName, HANDLE* phFile, HANDLE* phSe
 	{
 		ZwClose(hSection);
 		ZwClose(hFile);
-		KdPrint(("ZwMapViewOfSection Error! [error code: 0x%X]", status));
+		KdPrint(("[Detect]ZwMapViewOfSection Error! [error code: 0x%X]", status));
 		return status;
 	}
 
@@ -82,14 +82,14 @@ ULONG GetIndexFromExportTable(PVOID pBaseAddress, PWCHAR pszFunctionName, ULONG 
 	PIMAGE_DOS_HEADER pDosHeader = (PIMAGE_DOS_HEADER)pBaseAddress;
 	if (pDosHeader->e_magic != IMAGE_DOS_SIGNATURE)
 	{
-		KdPrint(("[test]DosError"));
+		KdPrint(("[Detect]DosError"));
 		return 0;
 	}
 	// NT Header
 	PIMAGE_NT_HEADERS pNtHeaders = (PIMAGE_NT_HEADERS)((PUCHAR)pDosHeader + pDosHeader->e_lfanew);
 	if (pNtHeaders->Signature != IMAGE_NT_SIGNATURE)
 	{
-		KdPrint(("[test]NtError"));
+		KdPrint(("[Detect]NtError"));
 		return 0;
 	}
 	// Export Table
@@ -115,4 +115,25 @@ ULONG GetIndexFromExportTable(PVOID pBaseAddress, PWCHAR pszFunctionName, ULONG 
 		}
 	}
 	return result;
+}
+
+BOOLEAN MDLWriteMemory(PVOID pBaseAddress, PVOID pWriteData, SIZE_T writeDataSize)
+{
+	PMDL pMdl = NULL;
+	PVOID pNewAddress = NULL;
+	pMdl = MmCreateMdl(NULL, pBaseAddress, writeDataSize);
+	if (NULL == pMdl)
+	{
+		return FALSE;
+	}
+	MmBuildMdlForNonPagedPool(pMdl);
+	pNewAddress = MmMapLockedPages(pMdl, KernelMode);
+	if (NULL == pNewAddress)
+	{
+		IoFreeMdl(pMdl);
+	}
+	RtlCopyMemory(pNewAddress, pWriteData, writeDataSize);
+	MmUnmapLockedPages(pNewAddress, pMdl);
+	IoFreeMdl(pMdl);
+	return TRUE;
 }

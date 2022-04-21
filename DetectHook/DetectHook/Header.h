@@ -29,27 +29,21 @@ typedef struct _MODULE_LIST
 
 } MODULE_LIST, * PMODULE_LIST, ** PPMODULE_LIST;
 
-
 typedef struct _SYSTEM_MODULE_INFORMATION
 {
 	ULONG Count;
 	MODULE_INFO Module[1];
 } SYSTEM_MODULE_INFORMATION, * PSYSTEM_MODULE_INFORMATION;
 
-
 typedef struct _NTOSKRNL {
 	ULONG base;
 	ULONG end;
 } NTOSKRNL, * PNTOSKRNL;
 
-
 typedef enum tagSYSTEM_INFORMATION_CLASS {
 	SystemModuleInformation = 11
 } SYSTEM_INFORMATION_CLASS;
 //return pointer point to PMODULE_LIST
-
-
-
 
 NTKERNELAPI
 NTSTATUS
@@ -88,3 +82,5 @@ ULONG GetSSDTFunctionIndex(UNICODE_STRING ustrDllFileName, PWCHAR pszFunctionNam
 NTSTATUS DllFileMap(UNICODE_STRING ustrDllFileName, HANDLE* phFile, HANDLE* phSection, PVOID* ppBaseAddress);
 
 ULONG GetIndexFromExportTable(PVOID pBaseAddress, PWCHAR pszFunctionName, ULONG index);
+
+PVOID ScanHook();
